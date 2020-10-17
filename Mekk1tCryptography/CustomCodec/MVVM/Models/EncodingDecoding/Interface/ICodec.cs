@@ -4,6 +4,7 @@
     {
         public void Encode();
         public void Decode();
-        public string GetMessage();
+        public string GetEncodedMessage();
+        public string GetDecodedMessage();
     }
 }
