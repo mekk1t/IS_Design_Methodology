@@ -1,13 +1,15 @@
 ﻿using CustomCodec.MVVM.Models.EncodingDecoding.Interfaces;
+using CustomCodec_WPF.MVVM.Models.EncodingDecoding.Alphabets;
 using System;
 
 namespace CustomCodec.MVVM.Models.EncodingDecoding
 {
-    public class Codec : ICodec
+    public class VernamAlgorithm : ICodec
     {
         private string message;
+        private readonly IAlphabet alphabet;
 
-        public Codec(string message)
+        public VernamAlgorithm(string message)
         {
             this.message = message;
         }
