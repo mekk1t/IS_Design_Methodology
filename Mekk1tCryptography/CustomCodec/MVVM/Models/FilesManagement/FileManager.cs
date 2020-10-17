@@ -20,8 +20,6 @@ namespace CustomCodec.Operations.FilesManagement
         public void SelectFile()
         {
             var ofd = new OpenFileDialog();
-
-            inputFile = new TextFile();
         }
 
         public void UnselectFile()
