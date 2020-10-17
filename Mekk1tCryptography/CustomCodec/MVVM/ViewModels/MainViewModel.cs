@@ -1,12 +1,11 @@
 ﻿using CustomCodec.MVVM.Models.EncodingDecoding.Interfaces;
 using CustomCodec.MVVM.Models.FilesManagement.Interfaces;
 using System;
-using System.ComponentModel;
 using System.Windows.Media.Imaging;
 
 namespace CustomCodec.MVVM.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel
     {
         private const string urlToImage = @"D:\Repositories\IS_Design_Methodology\Mekk1tCryptography\CustomCodec\icon.ico";
         public BitmapFrame Icon { get; } = BitmapFrame.Create(new Uri(urlToImage, UriKind.Absolute));
@@ -39,7 +38,5 @@ namespace CustomCodec.MVVM.ViewModels
         public MainViewModel()
         {
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
