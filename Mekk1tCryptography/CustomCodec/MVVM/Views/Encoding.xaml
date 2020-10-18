@@ -43,10 +43,10 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="2" IsEnabled="{Binding InputHasText}">Зашифровать</Button>
+                <Button Grid.Row="2" Command="{Binding encodeCommand}" IsEnabled="{Binding InputHasText}">Зашифровать</Button>
             </Grid>
             <TextBox IsReadOnly="True" Text="{Binding Output, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Margin="10" Grid.Row="1" Grid.Column="2"></TextBox>
-            <Button Margin="10" Grid.Column="0" Grid.Row="2" Content="Считать из файла" />
+            <Button Margin="10" Command="{Binding readFromFileCommand}" Grid.Column="0" Grid.Row="2" Content="Считать из файла" />
             <Button Margin="10" Grid.Column="2" Grid.Row="2" IsEnabled="{Binding OutputHasText}" Content="Сохранить в файл" />
         </Grid>
     </StackPanel>

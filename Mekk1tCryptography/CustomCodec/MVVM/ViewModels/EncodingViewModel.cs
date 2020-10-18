@@ -1,6 +1,12 @@
-﻿using CustomCodec.MVVM.Models.EncodingDecoding.Interfaces;
-using CustomCodec.MVVM.Models.FilesManagement.Interfaces;
+﻿using CustomCodec.MVVM.Models.EncodingDecoding;
+using CustomCodec.MVVM.Models.EncodingDecoding.Interfaces;
+using CustomCodec.Operations.FilesManagement;
+using CustomCodec_WPF.MVVM.Models;
+using CustomCodec_WPF.MVVM.Models.Commands;
+using CustomCodec_WPF.MVVM.ViewModels;
+using CustomCodec_WPF.MVVM.Views;
 using System.ComponentModel;
+using System.Windows.Input;
 
 namespace CustomCodec.MVVM.ViewModels
 {
@@ -54,8 +60,11 @@ namespace CustomCodec.MVVM.ViewModels
             }
         }
 
-        private readonly IFileManager fileManager;
-        private readonly ICodec codec;
+        public ICommand readFromFileCommand { get; set; }
+        public ICommand encodeCommand { get; set; }
+
+        private readonly FileManager fileManager;
+        private ICodec codec;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -64,8 +73,32 @@ namespace CustomCodec.MVVM.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void ReadFromFile()
+        {
+            Input = fileManager.ReadFromFile();
+        }
+
+        private void Encode()
+        {
+            var algorithmParameters = new AlgorithmParameters();
+            var valuesWindow = new Values();
+            if (valuesWindow.ShowDialog() == true)
+            {
+                var dataContext = (ValuesViewModel)valuesWindow.DataContext;
+                algorithmParameters.Key = dataContext.Key;
+                algorithmParameters.Mod = dataContext.Mod;
+                algorithmParameters.Message = Input;
+            }
+            codec = new VernamAlgorithm(algorithmParameters);
+            codec.Encode();
+            Output = codec.GetEncodedMessage();
+        }
+
         public EncodingViewModel()
         {
+            fileManager = new FileManager();
+            readFromFileCommand = new Command(ReadFromFile);
+            encodeCommand = new Command(Encode);
         }
     }
 }

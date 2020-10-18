@@ -1,5 +1,5 @@
 ﻿using CustomCodec.MVVM.Models.EncodingDecoding.Interfaces;
-using CustomCodec.MVVM.Models.FilesManagement.Interfaces;
+using CustomCodec.Operations.FilesManagement;
 using System.ComponentModel;
 
 namespace CustomCodec_WPF.MVVM.ViewModels
@@ -55,7 +55,7 @@ namespace CustomCodec_WPF.MVVM.ViewModels
             }
         }
 
-        private readonly IFileManager fileManager;
+        private readonly FileManager fileManager;
         private readonly ICodec codec;
 
         public event PropertyChangedEventHandler PropertyChanged;
