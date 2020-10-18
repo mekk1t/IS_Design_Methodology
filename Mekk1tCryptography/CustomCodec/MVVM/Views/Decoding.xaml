@@ -1,0 +1,49 @@
+﻿<Window x:Class="CustomCodec_WPF.MVVM.Views.DecodingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CustomCodec_WPF.MVVM.ViewModels"
+        mc:Ignorable="d"
+        Closing="ReturnToSelection"
+        Title="Расшифровка" Height="450" Width="800">
+    <Window.DataContext>
+        <local:DecodingViewModel/>
+    </Window.DataContext>
+    <StackPanel>
+        <TextBlock TextAlignment="Center">
+        </TextBlock>
+        <Grid Margin="0 20 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="300" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Label HorizontalAlignment="Center" Grid.Column="0" Content="Исходный текст" />
+            <Label HorizontalAlignment="Center" Grid.Column="2" Content="Зашифрованный текст" />
+            <TextBox Text="{Binding Input}" TextWrapping="Wrap" Margin="10" Grid.Row="1" Grid.Column="0"></TextBox>
+            <Grid Grid.Row="1" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="1" IsEnabled="{Binding NotEncoded}" >Зашифровать</Button>
+                <Button Grid.Row="3" IsEnabled="{Binding DidUserInputText}">Расшифровать</Button>
+            </Grid>
+            <TextBox IsReadOnly="True" Text="{Binding Output}" TextWrapping="Wrap" Margin="10" Grid.Row="1" Grid.Column="2"></TextBox>
+            <Button Margin="10" Grid.Column="0" Grid.Row="2" Content="Считать из файла" />
+            <Button Margin="10" Grid.Column="2" Grid.Row="2" IsEnabled="{Binding IsEncoded}" Content="Сохранить в файл" />
+        </Grid>
+    </StackPanel>
+</Window>
