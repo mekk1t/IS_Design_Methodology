@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using CustomCodec_WPF.MVVM.Views;
+using System.Windows;
 
 namespace CustomCodec
 {
@@ -7,7 +8,7 @@ namespace CustomCodec
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
-            new MainWindow().Show();
+            new OperationSelection().Show();
         }
     }
 }
