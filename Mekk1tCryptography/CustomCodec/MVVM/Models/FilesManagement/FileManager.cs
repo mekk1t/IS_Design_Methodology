@@ -1,30 +1,18 @@
-﻿using CustomCodec.MVVM.Models;
-using CustomCodec.MVVM.Models.FilesManagement.Interfaces;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
+using System.IO;
 
 namespace CustomCodec.Operations.FilesManagement
 {
-    public class FileManager : IFileManager
+    public class FileManager
     {
-        private TextFile inputFile;
-        private TextFile outputFile;
-
-        public void ReadFromFile(string filePath)
-        {
-        }
-
-        public void SaveToFile(string filePath)
-        {
-        }
-
-        public void SelectFile()
+        public string ReadFromFile()
         {
             var ofd = new OpenFileDialog();
-        }
-
-        public void UnselectFile()
-        {
-            inputFile = null;
+            if (ofd.ShowDialog() == true)
+            {
+                return File.ReadAllText(ofd.FileName);
+            }
+            return null;
         }
     }
 }
