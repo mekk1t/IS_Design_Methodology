@@ -13,11 +13,13 @@ namespace CustomCodec_WPF.MVVM.Views
         private void OpenDecoding(object sender, RoutedEventArgs e)
         {
             new DecodingWindow().Show();
+            Close();
         }
 
         private void OpenEncoding(object sender, RoutedEventArgs e)
         {
             new EncodingWindow().Show();
+            Close();
         }
     }
 }
