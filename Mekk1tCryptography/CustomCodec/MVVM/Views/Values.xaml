@@ -27,13 +27,15 @@
             <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">Модуль:</Label>
             <TextBox Text="{Binding Mod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1" Margin="5"></TextBox>
         </Grid>
-        <Button
+        <StackPanel Orientation="Horizontal">
+            <Button
             IsEnabled="{Binding AreValuesTypedIn, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             Content="ОК"
+                Click="OK"
             Width="50"
             HorizontalContentAlignment="Center">
-        </Button>
-        <Button Margin="5" Click="Button_Click" Content="Очистить Ключ" />
-        <Label Content="{Binding Key, UpdateSourceTrigger=PropertyChanged}"></Label>
+            </Button>
+            <Button IsCancel="True" Click="Cancel" Width="50">Назад</Button>
+        </StackPanel>
     </StackPanel>
 </Window>

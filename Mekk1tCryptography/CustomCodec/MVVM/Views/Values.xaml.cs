@@ -8,5 +8,15 @@ namespace CustomCodec_WPF.MVVM.Views
         {
             InitializeComponent();
         }
+
+        private void OK(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+        }
+
+        private void Cancel(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+        }
     }
 }
