@@ -96,11 +96,11 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
         }
         private void NumberTheKeyMask()
         {
-            keyMaskNumbered = new byte[parameters.Key.Length];
+            keyMaskNumbered = new byte[keyMask.Length];
 
-            for (int i = 0; i < parameters.Key.Length; i++)
+            for (int i = 0; i < keyMask.Length; i++)
             {
-                keyMaskNumbered[i] = alphabet.Alphabet[parameters.Key[i]];
+                keyMaskNumbered[i] = alphabet.Alphabet[keyMask[i]];
             }
         }
 
