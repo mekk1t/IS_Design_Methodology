@@ -70,6 +70,7 @@ namespace CustomCodec.MVVM.ViewModels
             }
         }
 
+        public ICommand saveToFileCommand { get; set; }
         public ICommand clearInputCommand { get; set; }
         public ICommand readFromFileCommand { get; set; }
         public ICommand encodeCommand { get; set; }
@@ -129,6 +130,7 @@ namespace CustomCodec.MVVM.ViewModels
             if (cachedParameters != null)
             {
                 Input = default;
+                NotifyPropertyChanged(nameof(Input));
                 Thread.Sleep(1000);
 
                 codec = new VernamAlgorithm(cachedParameters);
@@ -139,6 +141,11 @@ namespace CustomCodec.MVVM.ViewModels
             }
         }
 
+        private void SaveToFile()
+        {
+            fileManager.SaveToFile(Output);
+        }
+
         public EncodingViewModel()
         {
             fileManager = new FileManager();
@@ -146,6 +153,7 @@ namespace CustomCodec.MVVM.ViewModels
             encodeCommand = new Command(Encode);
             testEncodingCommand = new Command(TestEncoding);
             clearInputCommand = new Command(ClearInput);
+            saveToFileCommand = new Command(SaveToFile);
         }
     }
 }

@@ -19,5 +19,19 @@ namespace CustomCodec.Operations.FilesManagement
             }
             return null;
         }
+
+        public void SaveToFile(string content)
+        {
+            var sfd = new SaveFileDialog();
+
+            sfd.InitialDirectory = Environment.CurrentDirectory;
+            sfd.Filter = "Текстовые файлы (*.txt)|*.txt";
+
+            if (sfd.ShowDialog() == true)
+            {
+                using (StreamWriter sw = new StreamWriter(sfd.FileName))
+                    sw.WriteLine(content);
+            }
+        }
     }
 }
