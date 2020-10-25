@@ -3,6 +3,7 @@ using CustomCodec_WPF.MVVM.Models;
 using CustomCodec_WPF.MVVM.Models.EncodingDecoding.Alphabets;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace CustomCodec.MVVM.Models.EncodingDecoding
@@ -14,7 +15,7 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
         private readonly Dictionary<char, byte> alphabet;
 
         private List<int> whitespaceIndexes = new List<int>();
-        private const byte MODULE = 33;
+        private readonly byte MODULE;
         private const byte EMPTY_SPACE_BYTE_VALUE = 255;
 
         private string keyMask;
@@ -34,6 +35,8 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
             key = parameters.Key.ToLower();
 
             alphabet = new RussianAlphabet().Alphabet;
+
+            MODULE = (byte)alphabet.Count;
         }
 
         public void Decode()
