@@ -43,7 +43,9 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="2" Command="{Binding encodeCommand}" IsEnabled="{Binding InputHasText}">Зашифровать</Button>
+                <Button Margin="10" Grid.Row="1" Command="{Binding encodeCommand}" IsEnabled="{Binding InputHasText}">Зашифровать</Button>
+                <Button Margin="10" Grid.Row="3" Command="{Binding testEncodingCommand}" IsEnabled="{Binding CanTestEncoding}">Проверить</Button>
+                <Button Margin="10" Grid.Row="4" Command="{Binding clearInputCommand}" IsEnabled="{Binding InputHasText}">Очистить ввод</Button>
             </Grid>
             <TextBox IsReadOnly="True" Text="{Binding Output, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" Margin="10" Grid.Row="1" Grid.Column="2"></TextBox>
             <Button Margin="10" Command="{Binding readFromFileCommand}" Grid.Column="0" Grid.Row="2" Content="Считать из файла" />

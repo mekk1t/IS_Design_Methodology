@@ -6,12 +6,20 @@ using CustomCodec_WPF.MVVM.Models.Commands;
 using CustomCodec_WPF.MVVM.ViewModels;
 using CustomCodec_WPF.MVVM.Views;
 using System.ComponentModel;
+using System.Threading;
 using System.Windows.Input;
 
 namespace CustomCodec.MVVM.ViewModels
 {
     public class EncodingViewModel : INotifyPropertyChanged
     {
+        public bool CanTestEncoding
+        {
+            get
+            {
+                return !InputHasText && OutputHasText;
+            }
+        }
         public bool OutputHasText
         {
             get
@@ -46,6 +54,8 @@ namespace CustomCodec.MVVM.ViewModels
             }
         }
 
+        private AlgorithmParameters cachedParameters { get; set; }
+
         private string _output;
         public string Output {
             get
@@ -60,8 +70,10 @@ namespace CustomCodec.MVVM.ViewModels
             }
         }
 
+        public ICommand clearInputCommand { get; set; }
         public ICommand readFromFileCommand { get; set; }
         public ICommand encodeCommand { get; set; }
+        public ICommand testEncodingCommand { get; set; }
 
         private readonly FileManager fileManager;
         private ICodec codec;
@@ -73,9 +85,20 @@ namespace CustomCodec.MVVM.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void ClearInput()
+        {
+            Input = null;
+            NotifyPropertyChanged(nameof(CanTestEncoding));
+        }
+
         private void ReadFromFile()
         {
             Input = fileManager.ReadFromFile();
+        }
+
+        private void CacheParameters(AlgorithmParameters parameters)
+        {
+            cachedParameters = new AlgorithmParameters(parameters);
         }
 
         private void Encode()
@@ -85,13 +108,36 @@ namespace CustomCodec.MVVM.ViewModels
             if (valuesWindow.ShowDialog() == true)
             {
                 var dataContext = (ValuesViewModel)valuesWindow.DataContext;
+
                 algorithmParameters.Key = dataContext.Key;
                 algorithmParameters.Mod = dataContext.Mod;
                 algorithmParameters.Message = Input;
+
+                CacheParameters(algorithmParameters);
+
+                codec = new VernamAlgorithm(algorithmParameters);
+                codec.Encode();
+
+                Output = codec.GetEncodedMessage();
+
+                cachedParameters.Message = Output;
+                NotifyPropertyChanged(nameof(CanTestEncoding));
             }
-            codec = new VernamAlgorithm(algorithmParameters);
-            codec.Encode();
-            Output = codec.GetEncodedMessage();
+        }
+
+        private void TestEncoding()
+        {
+            if (cachedParameters != null)
+            {
+                Input = default;
+                Thread.Sleep(1000);
+
+                codec = new VernamAlgorithm(cachedParameters);
+                codec.Decode();
+                Input = codec.GetDecodedMessage();
+
+                NotifyPropertyChanged(nameof(CanTestEncoding));
+            }
         }
 
         public EncodingViewModel()
@@ -99,6 +145,8 @@ namespace CustomCodec.MVVM.ViewModels
             fileManager = new FileManager();
             readFromFileCommand = new Command(ReadFromFile);
             encodeCommand = new Command(Encode);
+            testEncodingCommand = new Command(TestEncoding);
+            clearInputCommand = new Command(ClearInput);
         }
     }
 }
