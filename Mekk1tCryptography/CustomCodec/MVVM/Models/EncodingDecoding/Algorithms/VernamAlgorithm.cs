@@ -1,6 +1,7 @@
 ﻿using CustomCodec.MVVM.Models.EncodingDecoding.Interfaces;
 using CustomCodec_WPF.MVVM.Models;
 using CustomCodec_WPF.MVVM.Models.EncodingDecoding.Alphabets;
+using CustomCodec_WPF.MVVM.Models.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -78,8 +79,8 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
             var sb = new StringBuilder();
 
             var keyLength = key.Length;
-            var keyEntriesInMessageTimes = temp.Trim().Length / keyLength;
-            var remainingKeyLetters = temp.Trim().Length % keyLength;
+            var keyEntriesInMessageTimes = temp.RemoveWhitespace().Length / keyLength;
+            var remainingKeyLetters = temp.RemoveWhitespace().Length % keyLength;
 
             for (int i = 0; i < keyEntriesInMessageTimes; i++)
                 sb.Append(key);
