@@ -110,7 +110,6 @@ namespace CustomCodec.MVVM.ViewModels
                 var dataContext = (ValuesViewModel)valuesWindow.DataContext;
 
                 algorithmParameters.Key = dataContext.Key;
-                algorithmParameters.Mod = dataContext.Mod;
                 algorithmParameters.Message = Input;
 
                 CacheParameters(algorithmParameters);

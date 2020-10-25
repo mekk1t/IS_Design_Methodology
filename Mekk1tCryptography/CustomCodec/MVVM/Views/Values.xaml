@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Данные для алгоритма шифрования"
         WindowStartupLocation="CenterScreen"
-        Height="200" Width="400">
+        Height="Auto" Width="400">
     <Window.DataContext>
         <local:ValuesViewModel />
     </Window.DataContext>
@@ -19,23 +19,31 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition />
             </Grid.RowDefinitions>
             <Label Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center">Ключ:</Label>
             <TextBox Text="{Binding Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0" Margin="5" ></TextBox>
-
-            <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center">Модуль:</Label>
-            <TextBox Text="{Binding Mod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1" Margin="5"></TextBox>
         </Grid>
-        <StackPanel Orientation="Horizontal">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
             <Button
+                Margin="10"
+                Grid.Row="0"
             IsEnabled="{Binding AreValuesTypedIn, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
             Content="ОК"
                 Click="OK"
             Width="50"
             HorizontalContentAlignment="Center">
             </Button>
-            <Button IsCancel="True" Click="Cancel" Width="50">Назад</Button>
-        </StackPanel>
+            <Button
+                Margin="10"
+                Grid.Row="1"
+                IsCancel="True" Click="Cancel" Width="50">Назад</Button>
+        </Grid>
     </StackPanel>
 </Window>

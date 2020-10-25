@@ -1,6 +1,4 @@
-﻿using CustomCodec_WPF.MVVM.Views;
-using System.Windows;
-using System.ComponentModel;
+﻿using System.Windows;
 
 namespace CustomCodec
 {
@@ -9,11 +7,6 @@ namespace CustomCodec
         public EncodingWindow()
         {
             InitializeComponent();
-        }
-
-        private void Window_Closing(object sender, CancelEventArgs e)
-        {
-            new OperationSelection().Show();
         }
     }
 }

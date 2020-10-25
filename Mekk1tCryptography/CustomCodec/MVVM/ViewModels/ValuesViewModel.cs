@@ -4,21 +4,6 @@ namespace CustomCodec_WPF.MVVM.ViewModels
 {
     public class ValuesViewModel : INotifyPropertyChanged
     {
-        private byte _mod;
-        public byte Mod
-        {
-            get
-            {
-                return _mod;
-            }
-            set
-            {
-                _mod = value;
-                NotifyPropertyChanged(nameof(Mod));
-                NotifyPropertyChanged(nameof(AreValuesTypedIn));
-            }
-        }
-
         private string _key;
         public string Key
         {
@@ -38,7 +23,7 @@ namespace CustomCodec_WPF.MVVM.ViewModels
         {
             get
             {
-                return !string.IsNullOrEmpty(Key) && Mod != default;
+                return !string.IsNullOrEmpty(Key);
             }
         }
 

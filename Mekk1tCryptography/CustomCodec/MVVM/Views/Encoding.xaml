@@ -7,7 +7,6 @@
         mc:Ignorable="d"
         FontSize="20"
         WindowStartupLocation="CenterScreen"
-        Closing="Window_Closing"
         Title="Шифрование" Height="Auto" Width="1000">
     <Window.DataContext>
         <views:EncodingViewModel />
