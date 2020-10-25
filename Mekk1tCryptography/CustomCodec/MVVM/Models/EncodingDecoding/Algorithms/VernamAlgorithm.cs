@@ -67,17 +67,19 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
         private void ImposeKeyOnTheMessage()
         {
-            for (int i = 0; i < message.Length; i++)
+            var temp = message;
+
+            for (int i = 0; i < temp.Length; i++)
             {
-                if (char.IsWhiteSpace(message[i]))
+                if (char.IsWhiteSpace(temp[i]))
                     whitespaceIndexes.Add(i);
             }
 
             var sb = new StringBuilder();
 
             var keyLength = key.Length;
-            var keyEntriesInMessageTimes = message.Trim().Length / keyLength;
-            var remainingKeyLetters = message.Trim().Length % keyLength;
+            var keyEntriesInMessageTimes = temp.Trim().Length / keyLength;
+            var remainingKeyLetters = temp.Trim().Length % keyLength;
 
             for (int i = 0; i < keyEntriesInMessageTimes; i++)
                 sb.Append(key);
