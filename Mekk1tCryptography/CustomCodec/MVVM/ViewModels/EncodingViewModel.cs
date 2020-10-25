@@ -3,8 +3,10 @@ using CustomCodec.MVVM.Models.EncodingDecoding.Interfaces;
 using CustomCodec.Operations.FilesManagement;
 using CustomCodec_WPF.MVVM.Models;
 using CustomCodec_WPF.MVVM.Models.Commands;
+using CustomCodec_WPF.MVVM.Models.Language;
 using CustomCodec_WPF.MVVM.ViewModels;
 using CustomCodec_WPF.MVVM.Views;
+using CustomCodec_WPF.MVVM.Models.Language.Enum;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Input;
@@ -112,6 +114,14 @@ namespace CustomCodec.MVVM.ViewModels
 
                 algorithmParameters.Key = dataContext.Key;
                 algorithmParameters.Message = Input;
+
+                var language = Language.Define(Input);
+                if (language == Languages.Russian)
+                    algorithmParameters.UseRussian = true;
+                else if (language == Languages.English)
+                    algorithmParameters.UseRussian = false;
+                else
+                    return;
 
                 CacheParameters(algorithmParameters);
 
