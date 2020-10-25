@@ -4,6 +4,7 @@
     {
         public string Key { get; set; }
         public string Message { get; set; }
+        public bool UseRussian { get; set; } = true;
 
         public AlgorithmParameters()
         {
@@ -13,6 +14,7 @@
         {
             Key = parameters.Key;
             Message = parameters.Message;
+            UseRussian = parameters.UseRussian;
         }
     }
 }

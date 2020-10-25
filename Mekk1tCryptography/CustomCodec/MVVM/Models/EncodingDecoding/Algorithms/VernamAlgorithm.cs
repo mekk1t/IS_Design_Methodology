@@ -34,7 +34,10 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
             message = parameters.Message.ToLower();
             key = parameters.Key.ToLower();
 
-            alphabet = new RussianAlphabet().Alphabet;
+            if (parameters.UseRussian)
+                alphabet = new RussianAlphabet().Alphabet;
+            else
+                alphabet = new EnglishAlphabet().Alphabet;
 
             MODULE = (byte)alphabet.Count;
         }
