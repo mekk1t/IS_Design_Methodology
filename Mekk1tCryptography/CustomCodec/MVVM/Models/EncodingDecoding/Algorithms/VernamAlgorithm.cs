@@ -1,6 +1,7 @@
 ﻿using CustomCodec.MVVM.Models.EncodingDecoding.Interfaces;
 using CustomCodec_WPF.MVVM.Models;
 using CustomCodec_WPF.MVVM.Models.EncodingDecoding.Alphabets;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -8,10 +9,13 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 {
     public class VernamAlgorithm : ICodec
     {
-        private readonly AlgorithmParameters parameters;
-        private readonly IAlphabet alphabet;
+        private readonly string message;
+        private readonly string key;
+        private readonly Dictionary<char, byte> alphabet;
 
+        private List<int> whitespaceIndexes = new List<int>();
         private const byte MODULE = 33;
+        private const byte EMPTY_SPACE_BYTE_VALUE = 255;
 
         private string keyMask;
         private string encodedMessage;
@@ -26,9 +30,10 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
         public VernamAlgorithm(AlgorithmParameters parameters)
         {
-            this.parameters = parameters;
-            parameters.Mod = MODULE;
-            alphabet = new RussianAlphabet();
+            message = parameters.Message.ToLower();
+            key = parameters.Key.ToLower();
+
+            alphabet = new RussianAlphabet().Alphabet;
         }
 
         public void Decode()
@@ -59,38 +64,55 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
         private void ImposeKeyOnTheMessage()
         {
+            for (int i = 0; i < message.Length; i++)
+            {
+                if (char.IsWhiteSpace(message[i]))
+                    whitespaceIndexes.Add(i);
+            }
+
             var sb = new StringBuilder();
 
-            var keyLength = parameters.Key.Length;
-            var keyEntriesInMessageTimes = parameters.Message.Length / keyLength;
-            var remainingKeyLetters = parameters.Message.Length % keyLength;
+            var keyLength = key.Length;
+            var keyEntriesInMessageTimes = message.Trim().Length / keyLength;
+            var remainingKeyLetters = message.Trim().Length % keyLength;
 
             for (int i = 0; i < keyEntriesInMessageTimes; i++)
-                sb.Append(parameters.Key);
+                sb.Append(key);
 
             if (remainingKeyLetters != 0)
                 for (byte i = 0; i < remainingKeyLetters; i++)
-                    sb.Append(parameters.Key[i]);
+                    sb.Append(key[i]);
+
+            foreach (var index in whitespaceIndexes)
+            {
+                sb.Insert(index, ' ');
+            }
 
             keyMask = sb.ToString();
         }
 
         private void NumberTheEncodedMessage()
         {
-            encodedMessageNumbered = new byte[parameters.Message.Length];
+            encodedMessageNumbered = new byte[message.Length];
 
-            for (int i = 0; i < parameters.Message.Length; i++)
+            for (int i = 0; i < message.Length; i++)
             {
-                encodedMessageNumbered[i] = alphabet.Alphabet[parameters.Message[i]];
+                if (char.IsWhiteSpace(message[i]))
+                    encodedMessageNumbered[i] = 255;
+                else
+                    encodedMessageNumbered[i] = alphabet[message[i]];
             }
         }
         private void NumberTheMessage()
         {
-            messageNumbered = new byte[parameters.Message.Length];
+            messageNumbered = new byte[message.Length];
 
-            for (int i = 0; i < parameters.Message.Length; i++)
+            for (int i = 0; i < message.Length; i++)
             {
-                messageNumbered[i] = alphabet.Alphabet[parameters.Message[i]];
+                if (char.IsWhiteSpace(message[i]))
+                    messageNumbered[i] = 255;
+                else
+                    messageNumbered[i] = alphabet[message[i]];
             }
         }
         private void NumberTheKeyMask()
@@ -99,7 +121,10 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
             for (int i = 0; i < keyMask.Length; i++)
             {
-                keyMaskNumbered[i] = alphabet.Alphabet[keyMask[i]];
+                if (char.IsWhiteSpace(keyMask[i]))
+                    keyMaskNumbered[i] = 255;
+                else
+                    keyMaskNumbered[i] = alphabet[keyMask[i]];
             }
         }
 
@@ -109,7 +134,10 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
             for (int i = 0; i < encodedMessageNumbered.Length; i++)
             {
-                subtractByModule[i] = FindSubtractByMod(encodedMessageNumbered[i], keyMaskNumbered[i], MODULE);
+                if (encodedMessageNumbered[i] == EMPTY_SPACE_BYTE_VALUE)
+                    subtractByModule[i] = EMPTY_SPACE_BYTE_VALUE;
+                else
+                    subtractByModule[i] = FindSubtractByMod(encodedMessageNumbered[i], keyMaskNumbered[i], MODULE);
             }
         }
         private void SumByModule()
@@ -118,7 +146,10 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
             for (int i = 0; i < messageNumbered.Length; i++)
             {
-                sumByModule[i] = FindSumByMod(messageNumbered[i], keyMaskNumbered[i], MODULE);
+                if (messageNumbered[i] == EMPTY_SPACE_BYTE_VALUE)
+                    sumByModule[i] = EMPTY_SPACE_BYTE_VALUE;
+                else
+                    sumByModule[i] = FindSumByMod(messageNumbered[i], keyMaskNumbered[i], MODULE);
             }
         }
 
@@ -148,7 +179,10 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
             for (int i = 0; i < sumByModule.Length; i++)
             {
-                sb.Append(alphabet.Alphabet.FirstOrDefault(d => d.Value == sumByModule[i]).Key);
+                if (sumByModule[i] == EMPTY_SPACE_BYTE_VALUE)
+                    sb.Append(' ');
+                else
+                    sb.Append(alphabet.First(d => d.Value == sumByModule[i]).Key);
             }
 
             encodedMessage = sb.ToString();
@@ -159,7 +193,10 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
             for (int i = 0; i < subtractByModule.Length; i++)
             {
-                sb.Append(alphabet.Alphabet.FirstOrDefault(d => d.Value == subtractByModule[i]).Key);
+                if (subtractByModule[i] == EMPTY_SPACE_BYTE_VALUE)
+                    sb.Append(' ');
+                else
+                    sb.Append(alphabet.First(d => d.Value == subtractByModule[i]).Key);
             }
 
             decodedMessage = sb.ToString();
