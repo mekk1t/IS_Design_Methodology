@@ -1,6 +1,7 @@
 ﻿using CustomCodec.MVVM.Models.EncodingDecoding.Interfaces;
 using CustomCodec_WPF.MVVM.Models;
 using CustomCodec_WPF.MVVM.Models.EncodingDecoding.Alphabets;
+using CustomCodec_WPF.MVVM.Models.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -70,17 +71,19 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
         private void ImposeKeyOnTheMessage()
         {
-            for (int i = 0; i < message.Length; i++)
+            var temp = message;
+
+            for (int i = 0; i < temp.Length; i++)
             {
-                if (char.IsWhiteSpace(message[i]))
+                if (char.IsWhiteSpace(temp[i]))
                     whitespaceIndexes.Add(i);
             }
 
             var sb = new StringBuilder();
 
             var keyLength = key.Length;
-            var keyEntriesInMessageTimes = message.Trim().Length / keyLength;
-            var remainingKeyLetters = message.Trim().Length % keyLength;
+            var keyEntriesInMessageTimes = temp.RemoveWhitespace().Length / keyLength;
+            var remainingKeyLetters = temp.RemoveWhitespace().Length % keyLength;
 
             for (int i = 0; i < keyEntriesInMessageTimes; i++)
                 sb.Append(key);
