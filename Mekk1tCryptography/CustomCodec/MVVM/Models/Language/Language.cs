@@ -1,4 +1,6 @@
-﻿using CustomCodec_WPF.MVVM.Models.EncodingDecoding.Alphabets;
+﻿using System.Linq;
+using CustomCodec_WPF.MVVM.Models.EncodingDecoding.Alphabets;
+using CustomCodec_WPF.MVVM.Models.Extensions;
 using CustomCodec_WPF.MVVM.Models.Language.Enum;
 
 namespace CustomCodec_WPF.MVVM.Models.Language
@@ -10,22 +12,17 @@ namespace CustomCodec_WPF.MVVM.Models.Language
             var eng = new EnglishAlphabet().Alphabet;
             var rus = new RussianAlphabet().Alphabet;
 
-            var temp = content.Trim().ToLower();
-            int engCount = default;
-            int rusCount = default;
-            for (int i = 0; i < 5; i++)
-            {
-                if (rus.ContainsKey(temp[i]))
-                    rusCount++;
-                if (eng.ContainsKey(temp[i]))
-                    engCount++;
-            }
-            if (rusCount == 4)
-                return Languages.Russian;
-            else if (engCount == 4)
+            var temp = content
+                .Trim()
+                .RemoveWhitespace()
+                .ToLower();
+
+            if (eng.ContainsKey(temp.First()))
                 return Languages.English;
-            else
-                return Languages.Unknown;
+            else if (rus.ContainsKey(temp.First()))
+                return Languages.Russian;
+
+            return Languages.Unknown;
         }
     }
 }
