@@ -11,6 +11,8 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
         private readonly AlgorithmParameters parameters;
         private readonly IAlphabet alphabet;
 
+        private const byte MODULE = 33;
+
         private string keyMask;
         private string encodedMessage;
         private string decodedMessage;
@@ -25,11 +27,8 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
         public VernamAlgorithm(AlgorithmParameters parameters)
         {
             this.parameters = parameters;
-
-            if (parameters.UseEnglish)
-                alphabet = new EnglishAlphabet();
-            else
-                alphabet = new RussianAlphabet();
+            parameters.Mod = MODULE;
+            alphabet = new RussianAlphabet();
         }
 
         public void Decode()
@@ -110,7 +109,7 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
             for (int i = 0; i < encodedMessageNumbered.Length; i++)
             {
-                subtractByModule[i] = (byte)(encodedMessageNumbered[i] + parameters.Mod - keyMaskNumbered[i]);
+                subtractByModule[i] = FindSubtractByMod(encodedMessageNumbered[i], keyMaskNumbered[i], MODULE);
             }
         }
         private void SumByModule()
@@ -119,8 +118,28 @@ namespace CustomCodec.MVVM.Models.EncodingDecoding
 
             for (int i = 0; i < messageNumbered.Length; i++)
             {
-                sumByModule[i] = (byte)((byte)(messageNumbered[i] + keyMaskNumbered[i]) % parameters.Mod);
+                sumByModule[i] = FindSumByMod(messageNumbered[i], keyMaskNumbered[i], MODULE);
             }
+        }
+
+        private byte FindSumByMod(byte x, byte y, byte z)
+        {
+            if (x + y < z)
+                return (byte)(x + y);
+            if (x + y > z)
+                return (byte)(x + y - z);
+
+            return 0;
+        }
+
+        private byte FindSubtractByMod(byte x, byte y, byte z)
+        {
+            if (x - y > 0 && x - y < z)
+                return (byte)(x - y);
+            if (x - y < 0)
+                return (byte)(x + z - y);
+
+            return 0;
         }
 
         private void Encrypt()
